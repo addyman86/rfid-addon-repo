@@ -1,0 +1,12 @@
+{
+  "name": "RFID Lookup",
+  "version": "1.0",
+  "slug": "rfid_lookup",
+  "description": "RFID-Produktabfrage über MQTT & MariaDB",
+  "startup": "application",
+  "boot": "auto",
+  "host_network": true,
+  "options": {},
+  "schema": {},
+  "image": "local/rfid_lookup"
+}
