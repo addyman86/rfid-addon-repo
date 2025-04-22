@@ -9,5 +9,4 @@
   "arch": ["aarch64", "armv7", "armhf", "amd64", "i386"],
   "options": {},
   "schema": {},
-  "image": "local/rfid_lookup"
 }
