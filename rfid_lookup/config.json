@@ -8,5 +8,5 @@
   "host_network": true,
   "arch": ["aarch64", "armv7", "armhf", "amd64", "i386"],
   "options": {},
-  "schema": {},
+  "schema": {}
 }
