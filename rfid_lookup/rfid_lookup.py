@@ -3,10 +3,12 @@ import paho.mqtt.client as mqtt
 
 # MQTT-Konfiguration
 MQTT_BROKER = "192.168.10.2"
-MQTT_UID_TOPIC = "rfid-mini/sensor/rfid_uid/state"
-MQTT_PRODUCT_TOPIC = "rfid-mini/set_product"
-MQTT_STOCK_TOPIC = "rfid-mini/number/lagerbestand/command"
-MQTT_STOCK_SET_TOPIC = "rfid-mini/number/lagerbestand/set"
+MQTT_UID_TOPIC = "rfid/uid"
+MQTT_PRODUCT_TOPIC = "rfid/name"
+MQTT_STOCK_TOPIC = "rfid/menge"
+MQTT_STOCK_SET_TOPIC = "rfid/neue_menge"
+MQTT_DATA1_TOPIC = "rfid/data1"
+MQTT_DATA2_TOPIC = "rfid/data2"
 
 # MQTT-Benutzername und Passwort
 MQTT_USER = "mqtt"
@@ -29,7 +31,7 @@ def get_product_info(uid):
     try:
         conn = mariadb.connect(**db_config)
         cur = conn.cursor()
-        cur.execute("SELECT produktname, lagerbestand FROM produkte WHERE uid = ?", (uid,))
+        cur.execute("SELECT produktname, lagerbestand, data1, data2 FROM produkte WHERE uid = ?", (uid,))
         result = cur.fetchone()
         conn.close()
         return result
@@ -62,10 +64,12 @@ def on_message(client, userdata, msg):
         letzte_uid = uid
         result = get_product_info(uid)
         if result:
-            produkt, bestand = result
+            produkt, bestand, data1, data2 = result
             print(f"Gefunden: {produkt} ({bestand})")
             client.publish(MQTT_PRODUCT_TOPIC, produkt)
             client.publish(MQTT_STOCK_TOPIC, str(bestand))
+            client.publish(MQTT_DATA1_TOPIC, str(data1))
+            client.publish(MQTT_DATA2_TOPIC, str(data2))
         else:
             print("Unbekannte UID")
             letzte_uid = None
